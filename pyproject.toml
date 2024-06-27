@@ -13,6 +13,14 @@ langchain = "^0.2.5"
 langchain-community = "^0.2.5"
 fastembed = "^0.3.1"
 chromadb = "^0.5.3"
+pypdf = "^4.2.0"
+grpcio = "^1.64.1"
+opentelemetry-api = "^1.25.0"
+opentelemetry-sdk = "^1.25.0"
+protobuf = "^5.27.1"
+ollama = "^0.2.1"
+flask-babel = "^4.0.0"
+flask-sqlalchemy = "^3.1.1"
 
 
 [build-system]

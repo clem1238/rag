@@ -174,6 +174,20 @@ tests-mypy = ["mypy (>=1.6)", "pytest-mypy-plugins"]
 tests-no-zope = ["attrs[tests-mypy]", "cloudpickle", "hypothesis", "pympler", "pytest (>=4.3.0)", "pytest-xdist[psutil]"]
 
 [[package]]
+name = "babel"
+version = "2.15.0"
+description = "Internationalization utilities"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "Babel-2.15.0-py3-none-any.whl", hash = "sha256:08706bdad8d0a3413266ab61bd6c34d0c28d6e1e7badf40a2cebe67644e2e1fb"},
+    {file = "babel-2.15.0.tar.gz", hash = "sha256:8daf0e265d05768bc6c7a314cf1321e9a123afc328cc635c18622a2f30a04413"},
+]
+
+[package.extras]
+dev = ["freezegun (>=1.0,<2.0)", "pytest (>=6.0)", "pytest-cov"]
+
+[[package]]
 name = "backoff"
 version = "1.11.1"
 description = "Function decoration for backoff and retry"
@@ -793,6 +807,38 @@ Werkzeug = ">=3.0.0"
 [package.extras]
 async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
+
+[[package]]
+name = "flask-babel"
+version = "4.0.0"
+description = "Adds i18n/l10n support for Flask applications."
+optional = false
+python-versions = ">=3.8,<4.0"
+files = [
+    {file = "flask_babel-4.0.0-py3-none-any.whl", hash = "sha256:638194cf91f8b301380f36d70e2034c77ee25b98cb5d80a1626820df9a6d4625"},
+    {file = "flask_babel-4.0.0.tar.gz", hash = "sha256:dbeab4027a3f4a87678a11686496e98e1492eb793cbdd77ab50f4e9a2602a593"},
+]
+
+[package.dependencies]
+Babel = ">=2.12"
+Flask = ">=2.0"
+Jinja2 = ">=3.1"
+pytz = ">=2022.7"
+
+[[package]]
+name = "flask-sqlalchemy"
+version = "3.1.1"
+description = "Add SQLAlchemy support to your Flask application."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "flask_sqlalchemy-3.1.1-py3-none-any.whl", hash = "sha256:4ba4be7f419dc72f4efd8802d69974803c37259dd42f3913b0dcf75c9447e0a0"},
+    {file = "flask_sqlalchemy-3.1.1.tar.gz", hash = "sha256:e4b68bb881802dda1a7d878b2fc84c06d1ee57fb40b874d3dc97dabfa36b8312"},
+]
+
+[package.dependencies]
+flask = ">=2.2.5"
+sqlalchemy = ">=2.0.16"
 
 [[package]]
 name = "flatbuffers"
@@ -1918,6 +1964,20 @@ signals = ["blinker (>=1.4.0)"]
 signedtoken = ["cryptography (>=3.0.0)", "pyjwt (>=2.0.0,<3)"]
 
 [[package]]
+name = "ollama"
+version = "0.2.1"
+description = "The official Python client for Ollama."
+optional = false
+python-versions = "<4.0,>=3.8"
+files = [
+    {file = "ollama-0.2.1-py3-none-any.whl", hash = "sha256:b6e2414921c94f573a903d1069d682ba2fb2607070ea9e19ca4a7872f2a460ec"},
+    {file = "ollama-0.2.1.tar.gz", hash = "sha256:fa316baa9a81eac3beb4affb0a17deb3008fdd6ed05b123c26306cfbe4c349b6"},
+]
+
+[package.dependencies]
+httpx = ">=0.27.0,<0.28.0"
+
+[[package]]
 name = "onnx"
 version = "1.16.1"
 description = "Open Neural Network Exchange"
@@ -2554,6 +2614,24 @@ files = [
 windows-terminal = ["colorama (>=0.4.6)"]
 
 [[package]]
+name = "pypdf"
+version = "4.2.0"
+description = "A pure-python PDF library capable of splitting, merging, cropping, and transforming PDF files"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "pypdf-4.2.0-py3-none-any.whl", hash = "sha256:dc035581664e0ad717e3492acebc1a5fc23dba759e788e3d4a9fc9b1a32e72c1"},
+    {file = "pypdf-4.2.0.tar.gz", hash = "sha256:fe63f3f7d1dcda1c9374421a94c1bba6c6f8c4a62173a59b64ffd52058f846b1"},
+]
+
+[package.extras]
+crypto = ["PyCryptodome", "cryptography"]
+dev = ["black", "flit", "pip-tools", "pre-commit (<2.18.0)", "pytest-cov", "pytest-socket", "pytest-timeout", "pytest-xdist", "wheel"]
+docs = ["myst_parser", "sphinx", "sphinx_rtd_theme"]
+full = ["Pillow (>=8.0.0)", "PyCryptodome", "cryptography"]
+image = ["Pillow (>=8.0.0)"]
+
+[[package]]
 name = "pypdfium2"
 version = "4.30.0"
 description = "Python bindings to PDFium"
@@ -2658,6 +2736,17 @@ files = [
 
 [package.extras]
 dev = ["atomicwrites (==1.4.1)", "attrs (==23.2.0)", "coverage (==7.4.1)", "hatch", "invoke (==2.2.0)", "more-itertools (==10.2.0)", "pbr (==6.0.0)", "pluggy (==1.4.0)", "py (==1.11.0)", "pytest (==8.0.0)", "pytest-cov (==4.1.0)", "pytest-timeout (==2.2.0)", "pyyaml (==6.0.1)", "ruff (==0.2.1)"]
+
+[[package]]
+name = "pytz"
+version = "2024.1"
+description = "World timezone definitions, modern and historical"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pytz-2024.1-py2.py3-none-any.whl", hash = "sha256:328171f4e3623139da4983451950b28e95ac706e13f3f2630a879749e7a8b319"},
+    {file = "pytz-2024.1.tar.gz", hash = "sha256:2a29735ea9c18baf14b448846bde5a48030ed267578472d8955cd0e7443a9812"},
+]
 
 [[package]]
 name = "pyyaml"
@@ -3750,4 +3839,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11,<3.13"
-content-hash = "c15902ae82e5a0eb658e4a17d31d5c59963f016db28ed3ee719ddcb232a85fb0"
+content-hash = "3be82c6f671bbc5291653032df791a2e41a6b035e3f1531cf206da9e2a380acb"

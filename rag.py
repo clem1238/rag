@@ -16,11 +16,11 @@
 #     )
 
 
-
 from pathlib import Path
-
-from flask import Flask, request
+from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
 from langchain_community.llms import Ollama
+import ollama
 from langchain_community.vectorstores import Chroma
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
@@ -29,12 +29,15 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
 from langchain.prompts import PromptTemplate
 
+
 app = Flask(__name__)
+
+# def set_locale():
+#     babel.locale_set('en_US')  # Set English (US) as the default language
 
 folder_path = "db"
 
 cached_llm = Ollama(model="llama3")
-
 embedding = FastEmbedEmbeddings()
 
 text_splitter = RecursiveCharacterTextSplitter(
@@ -42,14 +45,36 @@ text_splitter = RecursiveCharacterTextSplitter(
 )
 
 raw_prompt = PromptTemplate.from_template(
-    """ 
-    <s>[INST] You are a technical assistant good at searching docuemnts. If you do not have an answer from the provided information say so. [/INST] </s>
+    """
+    <s>[INST] Tu es un assistant pédagogique qui aide les élèves à rédiger leur devoir. [/INST] </s>
     [INST] {input}
            Context: {context}
            Answer:
     [/INST]
 """
 )
+
+chat_history = [
+    {
+        "role": "system",
+        "content": "Tu es un assistant pédagogique qui aide les élèves à rédiger leur devoir.",
+    }
+]
+
+
+@app.route("/delete-document/<int:document_id>", methods=["DELETE"])
+def delete_document(document_id):
+    query = db.session.query(db.Model).filter_by(id=document_id)
+    document = query.first()
+    if document is None:
+        return
+    try:
+        db.session.delete(document)
+        db.session.commit()
+    except Exception as e:
+        return
+
+    return jsonify({"message": "Document deleted successfully"}), 200
 
 
 @app.route("/ai", methods=["POST"])
@@ -73,8 +98,11 @@ def askPDFPost():
     print("Post /ask_pdf called")
     json_content = request.json
     query = json_content.get("query")
+    context=json_content.get("context", [])
 
     print(f"query: {query}")
+
+    
 
     print("Loading vector store")
     vector_store = Chroma(persist_directory=folder_path, embedding_function=embedding)
@@ -95,31 +123,38 @@ def askPDFPost():
 
     print(result)
 
-    sources = []
-    for doc in result["context"]:
-        sources.append(
-            {"source": doc.metadata["source"], "page_content": doc.page_content}
-        )
 
-    response_answer = {"answer": result["answer"], "sources": sources}
-    return response_answer
+    # print(result["answer"]["content"])
+
+    # sources = []
+    # for doc in result["context"]:
+    #     sources.append(
+    #         {"source": doc.metadata["source"], "page_content": doc.page_content}
+    #     )
+
+    # response_answer = {"answer": result["answer"], "sources": sources}
+    # return response_answer
 
 
 @app.route("/pdf", methods=["POST"])
 def pdfPost():
     print("/pdf: got files:", request.files)
-    file = request.files["file"] # request => objet passé par flask et on récupère le fichier
-    save_dir = Path("~/.cache/rag/pdf").expanduser() # directory de stockage(destination)
-    save_dir.mkdir(parents=True, exist_ok=True) # crée le directory si il n'existe pas
-    save_file = save_dir.joinpath(file.filename) # sauve le fichier dans le directory
+    file = request.files[
+        "file"
+    ]  # request => objet passé par flask et on récupère le fichier
+    save_dir = Path(
+        "~/.cache/rag/pdf"
+    ).expanduser()  # directory de stockage(destination)
+    save_dir.mkdir(parents=True, exist_ok=True)  # crée le directory si il n'existe pas
+    save_file = save_dir.joinpath(file.filename)  # sauve le fichier dans le directory
     file.save(save_file)
     print(f"filename: {file.filename}")
 
-    loader = PDFPlumberLoader(save_file) # lit le pdf
-    docs = loader.load_and_split() # fais les chunks
-    print(f"docs len={len(docs)}") 
+    loader = PDFPlumberLoader(save_file)  # lit le pdf
+    docs = loader.load_and_split()  # fais les chunks
+    print(f"docs len={len(docs)}")
 
-    chunks = text_splitter.split_documents(docs) 
+    chunks = text_splitter.split_documents(docs)
     print(f"chunks len={len(chunks)}")
 
     vector_store = Chroma.from_documents(
@@ -134,6 +169,8 @@ def pdfPost():
         "doc_len": len(docs),
         "chunks": len(chunks),
     }
+
+    print(response)
     return response
 
 
